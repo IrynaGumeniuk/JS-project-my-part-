@@ -1,17 +1,15 @@
-import renderCountries from './templates/list-countries.hbs'
-import renderCountry from './templates/one-country.hbs';
 import debounce from 'lodash.debounce';
-import fetchCountries from './fetchCountries';
-
 
 import { info, error } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
-let foundedCountry = '';
+
+let foundedEvent = '';
 
 const refs = {
-    container: document.querySelector('.js-countries'),
-    input: document.querySelector('.countryInput')
+    input: document.querySelector('.eventInput'),
+    container: // (путь к контейнеру)
+
 };
 
 refs.input.addEventListener('input', debounce(() => {
@@ -20,8 +18,8 @@ refs.input.addEventListener('input', debounce(() => {
 
 function onSearch() {
     resetSearch();
-    foundedCountry = refs.input.value;
-    fetchCountries(foundedCountry)
+    foundedEvent = refs.input.value;
+    //вставить fetch fetchEvent(foundedEvent)
         .then(contentOutput)
         .catch(err => console.log(err));
 }
@@ -30,16 +28,16 @@ function resetSearch() {
     refs.container.innerHTML = '';
 }
 
-// функция отрисовки контента
+// отрисовка контента
 
-function contentOutput(countries) {
-    if (countries.length === 1) {
+function contentOutput(events) {
+    if (events.length === 1) {
         resetSearch();
-        markupContries(renderCountry, countries);
-    } else if (countries.length > 1 && countries.length <= 10) {
+        markupContries(//renderEvents, events);
+    } else if (events.length > 1 && events.length <= 10) {
         resetSearch();
-        markupContries(renderCountries, countries);
-    } else if (countries.length > 10) {
+        markupContries(//renderEvents, events);
+    } else if (events.length > 10) {
         resultMessage(
             error,
             'To many matches found. Please enter a more specific query!',
@@ -57,6 +55,6 @@ function resultMessage(typeInfo, textInfo) {
     });
 }
 
-function markupContries(tpl, countries) {
-    refs.container.insertAdjacentHTML('beforeend', tpl(countries));
+function markupEvents(tpl, events) {
+    refs.container.insertAdjacentHTML('beforeend', tpl(events));
 }
